@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 22:10:42 by hroxo             #+#    #+#             */
-/*   Updated: 2025/09/18 15:42:15 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/09/18 20:00:09 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	clean_lst(t_list **lst)
 		free(*lst);
 		(*lst) = next;
 	}
-	free(next);
 }
 
 t_list	*create_node(char *str, int n)
@@ -53,17 +52,14 @@ t_list	*create_node(char *str, int n)
 	return (node);
 }
 
-void	*put_last_node(t_list *list, char *buf, int n)
+t_list	*put_last_node(t_list *list, char *buf, int n)
 {
 	t_list	*node;
 	t_list	*new;
 
 	new = create_node(buf, n);
 	if (!new)
-	{
-		clean_lst(&list);
 		return (NULL);
-	}
 	if (!list)
 	{
 		list = new;
@@ -85,12 +81,13 @@ int	len_to_new_line(t_list *list)
 		return (-1);
 	len = 0;
 	i = 0;
-	while ((list->str[i] != '\n') && list)
+	while (list && (list->str[i] != '\n'))
 	{
 		if (list->str[i] == 0)
 		{
 			i = 0;
 			list = list->next;
+			continue ;
 		}
 		len++;
 		i++;

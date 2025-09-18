@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 11:32:41 by hroxo             #+#    #+#             */
-/*   Updated: 2025/09/18 15:46:52 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/09/18 20:18:30 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,15 @@ t_list	*new_list(t_list *list)
 	i = 0;
 	len = len_to_new_line(list);
 	if (len == -1)
-	{
-		clean_lst(&list);
 		return (NULL);
-	}
 	while (len)
 	{
 		if (list->str[i] == 0)
 		{
 			i = 0;
 			list = list->next;
+			i++;
+			continue ;
 		}
 		i++;
 		len--;
@@ -53,10 +52,7 @@ char	*to_line(t_list	*list)
 	i = 0;
 	len = len_to_new_line(list);
 	if (len == -1)
-	{
-		clean_lst(&list);
 		return (NULL);
-	}
 	out = malloc(len + 2);
 	if (!out)
 		return (NULL);
@@ -87,16 +83,10 @@ t_list	*read_fd(int fd)
 	while (bytes_read)
 	{
 		if (bytes_read < 0)
-		{
-			clean_lst(&head);
 			return (NULL);
-		}
 		head = put_last_node(head, buf, bytes_read);
 		if (!head)
-		{
-			clean_lst(&head);
 			return (NULL);
-		}
 		bytes_read = read(fd, buf, BUF_SIZE);
 	}
 	return (head);
@@ -122,10 +112,5 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	stash = new_list(stash);
-	if (!stash)
-	{
-		free(line);
-		return (NULL);
-	}
 	return (line);
 }
