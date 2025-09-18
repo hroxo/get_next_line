@@ -6,13 +6,27 @@
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 22:10:42 by hroxo             #+#    #+#             */
-/*   Updated: 2025/09/18 12:02:25 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/09/18 15:42:15 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <unistd.h>
+
+void	clean_lst(t_list **lst)
+{
+	t_list	*next;
+
+	while (*lst)
+	{
+		next = (*lst)->next;
+		free((*lst)->str);
+		free(*lst);
+		(*lst) = next;
+	}
+	free(next);
+}
 
 t_list	*create_node(char *str, int n)
 {
@@ -47,8 +61,7 @@ void	*put_last_node(t_list *list, char *buf, int n)
 	new = create_node(buf, n);
 	if (!new)
 	{
-		free(new);
-		free(list);
+		clean_lst(&list);
 		return (NULL);
 	}
 	if (!list)
@@ -68,9 +81,11 @@ int	len_to_new_line(t_list *list)
 	int	len;
 	int	i;
 
+	if (!list)
+		return (-1);
 	len = 0;
 	i = 0;
-	while (list->str[i] != '\n')
+	while ((list->str[i] != '\n') && list)
 	{
 		if (list->str[i] == 0)
 		{
@@ -80,35 +95,7 @@ int	len_to_new_line(t_list *list)
 		len++;
 		i++;
 	}
-	return (len + 1);
-}
-
-t_list	*read_fd(int fd)
-{
-	char	buf[BUF_SIZE];
-	t_list	*head;
-	int		bytes_read;
-
-	head = NULL;
-	if (fd < 0)
-		return (NULL);
-	bytes_read = read(fd, buf, BUF_SIZE);
-	while (bytes_read)
-	{
-		if (bytes_read < 0)
-		{
-			free(head);
-			return (NULL);
-		}
-		head = put_last_node(head, buf, bytes_read);
-		if (!head)
-		{
-			free(head);
-			return (NULL);
-		}
-		bytes_read = read(fd, buf, BUF_SIZE);
-	}
-	return (head);
+	return (len);
 }
 /*
 #include <stdio.h> 

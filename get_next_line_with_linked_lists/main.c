@@ -11,7 +11,15 @@ int main()
 	if (fd < 0)
 		return 1;
 	char	*line = get_next_line(fd);
-	printf("line: %s", line);
+	int n = 0;
+	while (line != NULL && n < 3)
+	{
+		n++;
+		printf("==>output<==\n");
+		printf("line: %s", line);
+		free(line);
+		line = get_next_line(fd);
+	}
 	free(line);
 	return 0;
 }
