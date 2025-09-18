@@ -6,15 +6,11 @@
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 22:34:07 by hroxo             #+#    #+#             */
-/*   Updated: 2025/09/15 12:52:24 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/09/15 21:43:52 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-#define BUF_SIZE 1024
+#include "get_next_line.h"
 
 size_t	ft_strlen(char *str)
 {
@@ -26,7 +22,7 @@ size_t	ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_strjoin(char *s1, char *s2, size_t n)
+static char	*ft_strjoin(char *s1, char *s2, size_t n)
 {
 	char	*output;
 	size_t	i;
@@ -46,7 +42,7 @@ char	*ft_strjoin(char *s1, char *s2, size_t n)
 	return (output);
 }
 
-char	*get_more_space(char *line, size_t *cap)
+static char	*get_more_space(char *line, size_t *cap)
 {
 	char	*temp;
 	size_t	i;
