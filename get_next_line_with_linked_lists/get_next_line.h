@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 22:09:52 by hroxo             #+#    #+#             */
-/*   Updated: 2025/09/18 19:56:00 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/09/19 13:56:23 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,17 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
+char	*get_next_line(int fd);
+void	create_list(t_list **stash, int fd);
+char	*to_line(t_list	*lst);
+void	new_list(t_list **stash);
+void	to_line_helper(t_list *lst, char *str);
+int		len_to_nl(t_list *lst);
+int		has_nl(t_list *list);
 t_list	*create_node(char *str, int n);
-void	clean_lst(t_list **lst);
-t_list	*put_last_node(t_list *list, char *buf, int n);
-int	len_to_new_line(t_list *list);
-t_list	*read_fd(int fd);
+void	to_line_helper(t_list *lst, char *str);
+void	clean_house(t_list **lst, t_list *new, char *buf);
+void	put_last_node(t_list **list, char *buf);
+char	*ft_strdup(char *str);
 
 #endif

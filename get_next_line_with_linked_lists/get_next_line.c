@@ -6,111 +6,116 @@
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 11:32:41 by hroxo             #+#    #+#             */
-/*   Updated: 2025/09/18 20:18:30 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/09/19 14:17:35 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-t_list	*new_list(t_list *list)
+void	to_line_helper(t_list *lst, char *str)
 {
-	t_list	*new_list;
-	int		len;
-	int		i;
-
-	i = 0;
-	len = len_to_new_line(list);
-	if (len == -1)
-		return (NULL);
-	while (len)
-	{
-		if (list->str[i] == 0)
-		{
-			i = 0;
-			list = list->next;
-			i++;
-			continue ;
-		}
-		i++;
-		len--;
-	}
-	new_list = create_node(&list->str[i], BUF_SIZE);
-	new_list->next = list->next;
-	return (new_list);
-}
-
-char	*to_line(t_list	*list)
-{
-	char	*out;
-	int		len;
 	int		i;
 	int		j;
 
 	j = 0;
+	while (lst)
+	{
+		i = 0;
+		while (lst->str[i])
+		{
+			if (lst->str[i] == '\n')
+			{
+				str[j++] = '\n';
+				str[j] = 0;
+				return ;
+			}
+			str[j++] = lst->str[i++];
+		}
+		lst = lst->next;
+	}
+	str[j] = 0;
+}
+
+void	new_list(t_list **stash)
+{
+	t_list	*new_node;
+	t_list	*last;
+	int		i;
+	int		j;
+	char	*buf;
+
 	i = 0;
-	len = len_to_new_line(list);
-	if (len == -1)
+	j = 0;
+	buf = malloc(BUF_SIZE + 1);
+	new_node = malloc(sizeof(t_list));
+	if (!buf || !new_node)
+		return ;
+	last = (*stash);
+	while (last->next)
+		last = last->next;
+	while (last->str[i] && (last->str[i] != '\n'))
+		i++;
+	while (last->str[i])
+		buf[j++] = last->str[++i];
+	buf[j] = 0;
+	new_node->str = buf;
+	new_node->next = NULL;
+	clean_house(stash, new_node, buf);
+	free(new_node);
+	free(buf);
+}
+
+char	*to_line(t_list	*lst)
+{
+	char	*out;
+	int		len;
+
+	if (lst == NULL)
 		return (NULL);
-	out = malloc(len + 2);
+	len = len_to_nl(lst);
+	out = malloc(len + 1);
 	if (!out)
 		return (NULL);
-	while (j < len)
-	{
-		if (list->str[i] == 0)
-		{
-			i = 0;
-			list = list->next;
-		}
-		out[j++] = list->str[i++];
-	}
-	out[j++] = '\n';
-	out[j] = 0;
+	to_line_helper(lst, out);
 	return (out);
 }
 
-t_list	*read_fd(int fd)
+void	create_list(t_list **stash, int fd)
 {
-	char	buf[BUF_SIZE];
-	t_list	*head;
+	char	*buf;
 	int		bytes_read;
 
-	head = NULL;
-	if (fd < 0)
-		return (NULL);
-	bytes_read = read(fd, buf, BUF_SIZE);
-	while (bytes_read)
+	while (!has_nl(*stash))
 	{
-		if (bytes_read < 0)
-			return (NULL);
-		head = put_last_node(head, buf, bytes_read);
-		if (!head)
-			return (NULL);
+		buf = malloc(BUF_SIZE + 1);
+		if (!buf)
+			return ;
 		bytes_read = read(fd, buf, BUF_SIZE);
+		if (bytes_read <= 0)
+		{
+			free(buf);
+			return ;
+		}
+		buf[bytes_read] = 0;
+		put_last_node(stash, buf);
 	}
-	return (head);
+	free(buf);
 }
 
 char	*get_next_line(int fd)
 {
-	static t_list	*stash;
+	static t_list	*stash = NULL;
 	char			*line;
 
-	if (fd < 0)
+	if (fd < 0 || BUF_SIZE <= 0 || (read(fd, &line, 0) < 0))
 		return (NULL);
+	create_list(&stash, fd);
 	if (!stash)
-	{
-		stash = read_fd(fd);
-		if (!stash)
-			return (NULL);
-	}
-	line = to_line(stash);
-	if (!line)
-	{
-		clean_lst(&stash);
 		return (NULL);
-	}
-	stash = new_list(stash);
+	line = to_line(stash);
+	new_list(&stash);
 	return (line);
 }

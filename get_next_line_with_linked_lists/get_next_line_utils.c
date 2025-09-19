@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 22:10:42 by hroxo             #+#    #+#             */
-/*   Updated: 2025/09/18 20:00:09 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/09/19 14:03:38 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,102 +14,115 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	clean_lst(t_list **lst)
+int	has_nl(t_list *list)
 {
-	t_list	*next;
-
-	while (*lst)
-	{
-		next = (*lst)->next;
-		free((*lst)->str);
-		free(*lst);
-		(*lst) = next;
-	}
-}
-
-t_list	*create_node(char *str, int n)
-{
-	t_list	*node;
 	int	i;
 
 	i = 0;
-	node = malloc(sizeof(t_list));
-	if (!node)
-		return (NULL);
-	node->str = malloc(sizeof(char) * n + 1);
-	if (!node->str)
+	while (list)
 	{
-		free(node);
-		return (NULL);
-	}
-	while (i < n && str[i])
-	{
-		node->str[i] = str[i];
+		if (list->str[i] == 0)
+		{
+			list = list->next;
+			i = 0;
+			continue ;
+		}
+		if (list->str[i] == '\n')
+			return (1);
 		i++;
 	}
-	node->str[i] = 0;
-	node->next = NULL;
-	return (node);
+	return (0);
 }
 
-t_list	*put_last_node(t_list *list, char *buf, int n)
-{
-	t_list	*node;
-	t_list	*new;
-
-	new = create_node(buf, n);
-	if (!new)
-		return (NULL);
-	if (!list)
-	{
-		list = new;
-		return (list);
-	}
-	node = list;
-	while (node->next)
-		node = node->next;
-	node->next = new;
-	return (list);
-}
-
-int	len_to_new_line(t_list *list)
+int	len_to_nl(t_list *lst)
 {
 	int	len;
 	int	i;
 
-	if (!list)
-		return (-1);
 	len = 0;
-	i = 0;
-	while (list && (list->str[i] != '\n'))
+	while (lst)
 	{
-		if (list->str[i] == 0)
+		i = 0;
+		while (lst->str[i])
 		{
-			i = 0;
-			list = list->next;
-			continue ;
+			if (lst->str[i] == '\n')
+			{
+				len++;
+				return (len);
+			}
+			len++;
+			i++;
 		}
-		len++;
-		i++;
+		lst = lst->next;
 	}
 	return (len);
 }
-/*
-#include <stdio.h> 
-#include <fcntl.h>
 
-int main()
+char	*ft_strdup(char *str)
 {
-	int fd = open("test.txt", O_RDONLY);
-	t_list *next;
-	t_list	*list = read_fd(fd);
-	while (list)
+	char	*out;
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	out = malloc(i + 1);
+	if (!out)
+		return (NULL);
+	i = 0;
+	while (str[i])
 	{
-		printf("list str: %s\n", list->str);
-		next = list->next;
-		free(list);
-		list = next;
+		out[i] = str[i];
+		i++;
 	}
-	return (0);
+	out[i] = 0;
+	return (out);
 }
-*/
+
+void	put_last_node(t_list **list, char *buf)
+{
+	t_list	*head;
+	t_list	*new;
+
+	new = malloc(sizeof(t_list));
+	if (!new)
+		return ;
+	new->str = ft_strdup(buf);
+	if (!new->str)
+	{
+		free(new);
+		return ;
+	}
+	new->next = NULL;
+	if (!(*list))
+	{
+		*list = new;
+		return ;
+	}
+	while (head->next)
+		head = head->next;
+	head->next = new;
+}
+
+void	clean_house(t_list **lst, t_list *new, char *buf)
+{
+	t_list	*tmp;
+
+	if (*lst == NULL)
+		return ;
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		free((*lst)->str);
+		free(*lst);
+		*lst = tmp;
+	}
+	(*lst) = NULL;
+	if (new->str[0])
+		*lst = new;
+	else
+	{
+		free(buf);
+		free(new);
+	}
+}
