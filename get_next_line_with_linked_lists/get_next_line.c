@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 11:32:41 by hroxo             #+#    #+#             */
-/*   Updated: 2025/09/19 14:17:35 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/09/19 14:25:28 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	new_list(t_list **stash)
 	new_node->next = NULL;
 	clean_house(stash, new_node, buf);
 	free(new_node);
-	free(buf);
+	//free(buf);
 }
 
 char	*to_line(t_list	*lst)

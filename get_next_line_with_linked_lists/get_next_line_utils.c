@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 22:10:42 by hroxo             #+#    #+#             */
-/*   Updated: 2025/09/19 14:03:38 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/09/19 14:25:09 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,6 @@ void	clean_house(t_list **lst, t_list *new, char *buf)
 	if (new->str[0])
 		*lst = new;
 	else
-	{
-		free(buf);
 		free(new);
-	}
+	free(buf);
 }
