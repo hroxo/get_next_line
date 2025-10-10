@@ -20,27 +20,15 @@ char    *get_line(char *output, int fd)
         int     f_r;
 
         f_r = read(fd, buf, BUFFER_SIZE);
-        buf[BUFFER_SIZE] = 0;
-        if (!output)
-                output = ft_strdup(buf);
-        else
-        {
-                if (f_r < BUFFER_SIZE)
-                        output = ft_strncat(buf, output, f_r);
-                else
-                        output = ft_strncat(buf, output, BUFFER_SIZE);
-        }
-        if (!output)
-                return (NULL);
         while (!has_nl(output) && f_r > 0)
         {
-                f_r = read(fd, buf, BUFFER_SIZE);
                 if (f_r < BUFFER_SIZE)
                         output = ft_strncat(buf, output, f_r);
                 else
                         output = ft_strncat(buf, output, BUFFER_SIZE);
                 if (!output)
                         return (NULL);
+                f_r = read(fd, buf, BUFFER_SIZE);
         }
         return (output);
 }
