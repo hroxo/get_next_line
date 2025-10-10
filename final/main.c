@@ -1,41 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_test.c                                        :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/15 14:28:16 by hroxo             #+#    #+#             */
-/*   Updated: 2025/09/15 14:44:58 by hroxo            ###   ########.fr       */
+/*   Created: 2025/10/10 16:46:00 by hroxo             #+#    #+#             */
+/*   Updated: 2025/10/10 18:21:52 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <unistd.h>
 
-char *get_next_line(int fd);
-
-int	main(int argc, char **argv)
+int main()
 {
-	int fd;
-	int	i = 1;
+	int fd = open("get_next_line.c", O_RDONLY);
+	char	*text = get_next_line(fd);
 
-	if (argc < 2)
-		fd = 0;
-	else
-		fd = open(argv[1], O_RDONLY);
-	char	*line;
-	while ((line = get_next_line(fd)) != NULL && i < 5)
+	while (text != NULL)
 	{
-		printf("%i %s", i, line);
-		i++;
-		free(line);
-		line = get_next_line(fd);
+		printf("%s", text);
+		free(text);
+		text = get_next_line(fd);
 	}
-	printf("\nCHECKPOINT\n");
-	free(line);
-	close(fd);
-	return (0);
+	free(text);
+	return 0;
 }
