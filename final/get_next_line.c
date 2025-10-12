@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42porto.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 15:28:23 by hroxo             #+#    #+#             */
-/*   Updated: 2025/10/10 18:21:10 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/10/12 11:55:56 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,13 @@ char    *get_line(char *output, int fd)
 	if (!output)
 		output = ft_strdup(buf);
 	else
-	{
-		if (f_r < BUFFER_SIZE)
-			output = ft_strncat(buf, output, f_r);
-		else
-			output = ft_strncat(buf, output, BUFFER_SIZE);
-	}
+		output = ft_strncat(buf, output, f_r);
 	if (!output)
 		return (NULL);
 	while (!has_nl(output) && f_r > 0)
 	{
 		f_r = read(fd, buf, BUFFER_SIZE);
-		if (f_r < BUFFER_SIZE)
-			output = ft_strncat(buf, output, f_r);
-		else
-			output = ft_strncat(buf, output, BUFFER_SIZE);
+		output = ft_strncat(buf, output, f_r);
 		if (!output)
 			return (NULL);
 	}
