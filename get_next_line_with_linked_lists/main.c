@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/08 20:48:00 by hroxo             #+#    #+#             */
-/*   Updated: 2025/10/09 15:06:55 by hroxo            ###   ########.fr       */
+/*   Created: 2025/10/10 16:46:00 by hroxo             #+#    #+#             */
+/*   Updated: 2025/10/14 23:16:39 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "get_next_line.h"
+#include <stdio.h>
+#include <fcntl.h>
+#include <stdlib.h>
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
-# endif
+int main()
+{
+	int fd = open("teST", O_RDONLY);
+	char	*text = get_next_line(fd);
 
-# include <unistd.h>
-# include <stdlib.h>
-
-size_t	len_nl(char *str);
-size_t	ft_strlen(char *str);
-char	*get_next_line(int fd);
-char	*ft_strncat(char *new, char *original, size_t nb);
-int		count_str(char *str);
-char	*ft_strndup(char *str, int nb);
-
-#endif
+	while (text != NULL)
+	{
+		printf("%s", text);
+		free(text);
+		text = get_next_line(fd);
+	}
+	free(text);
+	return 0;
+}

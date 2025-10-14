@@ -6,13 +6,11 @@
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 22:10:42 by hroxo             #+#    #+#             */
-/*   Updated: 2025/09/19 14:25:09 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/10/14 23:11:50 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdlib.h>
-#include <unistd.h>
 
 int	has_nl(t_list *list)
 {
@@ -21,15 +19,14 @@ int	has_nl(t_list *list)
 	i = 0;
 	while (list)
 	{
-		if (list->str[i] == 0)
+		i = 0;
+		while (list->str[i] != 0)
 		{
-			list = list->next;
-			i = 0;
-			continue ;
+			if (list->str[i] == '\n')
+				return (1);
+			i++;
 		}
-		if (list->str[i] == '\n')
-			return (1);
-		i++;
+		list = list->next;
 	}
 	return (0);
 }
@@ -57,51 +54,30 @@ int	len_to_nl(t_list *lst)
 	}
 	return (len);
 }
-
-char	*ft_strdup(char *str)
+t_list	*ft_lstlast(t_list *lst)
 {
-	char	*out;
-	size_t	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	out = malloc(i + 1);
-	if (!out)
+	if (!lst)
 		return (NULL);
-	i = 0;
-	while (str[i])
-	{
-		out[i] = str[i];
-		i++;
-	}
-	out[i] = 0;
-	return (out);
+	while (lst->next != NULL)
+		lst = lst->next;
+	return (lst);
 }
 
 void	put_last_node(t_list **list, char *buf)
 {
-	t_list	*head;
 	t_list	*new;
+	t_list	*last;
 
+	last = ft_lstlast(*list);
 	new = malloc(sizeof(t_list));
 	if (!new)
 		return ;
-	new->str = ft_strdup(buf);
-	if (!new->str)
-	{
-		free(new);
-		return ;
-	}
-	new->next = NULL;
-	if (!(*list))
-	{
+	if (!last)
 		*list = new;
-		return ;
-	}
-	while (head->next)
-		head = head->next;
-	head->next = new;
+	else
+		last->next = new;
+	new->str = buf;
+	new->next = NULL;
 }
 
 void	clean_house(t_list **lst, t_list *new, char *buf)
@@ -121,6 +97,8 @@ void	clean_house(t_list **lst, t_list *new, char *buf)
 	if (new->str[0])
 		*lst = new;
 	else
+	{
 		free(new);
-	free(buf);
+		free(buf);
+	}
 }
