@@ -54,6 +54,7 @@ int	len_to_nl(t_list *lst)
 	}
 	return (len);
 }
+
 t_list	*ft_lstlast(t_list *lst)
 {
 	if (!lst)
