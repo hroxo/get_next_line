@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:46:00 by hroxo             #+#    #+#             */
-/*   Updated: 2025/10/14 23:16:39 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/10/15 08:26:38 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 int main()
 {
-	int fd = open("teST", O_RDONLY);
+	int fd = open("get_next_line.c", O_RDONLY);
 	char	*text = get_next_line(fd);
 
 	while (text != NULL)
