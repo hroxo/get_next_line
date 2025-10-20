@@ -6,13 +6,11 @@
 /*   By: hroxo <hroxo@student.42porto.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 14:27:00 by hroxo             #+#    #+#             */
-/*   Updated: 2025/10/20 15:29:01 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/10/20 18:20:57 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-#include <iterator>
-#include <stddef.h>
 
 char	*ft_calloc(size_t nmemb, size_t size)
 {
@@ -72,6 +70,8 @@ size_t	has_nl(char *str)
 	size_t	len;
 
 	len = 0;
+	if (!str)
+		return (0);
 	while (str[len])
 	{
 		len++;
@@ -79,4 +79,16 @@ size_t	has_nl(char *str)
 			return (len);
 	}
 	return (0);
+}
+
+void	clean_house(char **strs)
+{
+	size_t	i;
+
+	i = 0;
+	while (strs[i])
+	{
+		free(strs[i]);
+		i++;
+	}
 }
