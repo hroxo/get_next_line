@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42porto.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 14:00:53 by hroxo             #+#    #+#             */
-/*   Updated: 2025/10/21 16:43:54 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/10/21 19:41:13 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*join_n_free(char *str, char *buf)
 {
 	char	*out;
 
-	if (!buf[0])
+	if (!buf[0] || !*buf)
 		return (str);
 	out = ft_strjoin(str, buf);
 	if (!out)
