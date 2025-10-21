@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hroxo <hroxo@student.42porto.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 14:27:00 by hroxo             #+#    #+#             */
-/*   Updated: 2025/10/21 11:50:33 by hroxo            ###   ########.fr       */
+/*   Created: 2025/10/21 11:39:54 by hroxo             #+#    #+#             */
+/*   Updated: 2025/10/21 11:41:42 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 char	*ft_calloc(size_t nmemb, size_t size)
 {
@@ -32,7 +32,7 @@ size_t	ft_strlen(char *str)
 {
 	size_t	len;
 
-	if (!str)
+	if (!str || *str == 0)
 		return (0);
 	len = 0;
 	while (str[len])
@@ -81,16 +81,4 @@ size_t	has_nl(char *str)
 		len++;
 	}
 	return (0);
-}
-
-void	clean_house(char **strs)
-{
-	size_t	i;
-
-	i = 0;
-	while (strs[i])
-	{
-		free(strs[i]);
-		i++;
-	}
 }
