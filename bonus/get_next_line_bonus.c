@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42porto.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 14:00:53 by hroxo             #+#    #+#             */
-/*   Updated: 2025/10/21 16:27:04 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/10/21 16:43:54 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	*read_file(char *stash, int fd)
 		f_r = read(fd, buf, BUFFER_SIZE);
 		if (f_r < 0)
 		{
+			free(stash);
 			free(buf);
 			return (NULL);
 		}
@@ -112,7 +113,8 @@ char	*get_next_line(int fd)
 	line = get_the_line(stash[fd]);
 	if (!line)
 	{
-		clean_house(stash);
+		free(stash[fd]);
+		stash[fd] = NULL;
 		return (NULL);
 	}
 	stash[fd] = update_stash(stash[fd]);
