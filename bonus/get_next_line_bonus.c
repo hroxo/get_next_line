@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42porto.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 14:00:53 by hroxo             #+#    #+#             */
-/*   Updated: 2025/10/21 12:01:23 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/10/21 16:27:04 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ char	*join_n_free(char *str, char *buf)
 {
 	char	*out;
 
+	if (!buf[0])
+		return (str);
 	out = ft_strjoin(str, buf);
 	if (!out)
 	{
-		free(buf);
+		free(str);
 		return (NULL);
 	}
 	free(str);
@@ -92,6 +94,7 @@ char	*update_stash(char *stash)
 		return (NULL);
 	while (stash[nl_len])
 		new_stash[i++] = stash[++nl_len];
+	new_stash[i] = 0;
 	free(stash);
 	return (new_stash);
 }
@@ -103,12 +106,6 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!stash[fd])
-	{
-		stash[fd] = ft_calloc(sizeof(char), 1);
-		if (!stash[fd])
-			return (NULL);
-	}
 	stash[fd] = read_file(stash[fd], fd);
 	if (!stash[fd])
 		return (NULL);
@@ -119,5 +116,10 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	stash[fd] = update_stash(stash[fd]);
+	if (stash[fd][0] == 0)
+	{
+		free(stash[fd]);
+		stash[fd] = NULL;
+	}
 	return (line);
 }

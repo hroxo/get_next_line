@@ -6,7 +6,7 @@
 /*   By: hroxo <hroxo@student.42porto.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 09:52:25 by hroxo             #+#    #+#             */
-/*   Updated: 2025/10/21 14:27:46 by hroxo            ###   ########.fr       */
+/*   Updated: 2025/10/21 15:52:16 by hroxo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,11 @@ int main()
 {
 	int fd = open("41_with_nl.txt", 0);
 	char *text = get_next_line(fd);
-	int i = 0;
-	while (i < 200)
+	while (text)
 	{
 		printf("%s", text);
 		free(text);
 		text = get_next_line(fd);
-		i++;
 	}
 	free(text);
 	close(fd);
